@@ -11,6 +11,7 @@
 #include "ShaderProgram.h"
 #include "Postprocessing.h"
 #include "PointLight.h"
+#include "SSAO.h"
 
 class Application
 {
@@ -34,6 +35,7 @@ private:
 	int current_height;
 
 	GLFWwindow* window;
+	std::shared_ptr<SSAO> ssao;
 	std::shared_ptr<ShaderProgram> program;
 	std::shared_ptr<Postprocessing> postprocessing;
 	std::shared_ptr<Camera> camera;

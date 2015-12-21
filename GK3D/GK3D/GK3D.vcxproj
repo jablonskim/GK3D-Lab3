@@ -192,6 +192,14 @@ copy "$(SolutionDir)\third_party\libnoise\bin\libnoise.dll" "$(TargetDir)"</Comm
     <None Include="Shaders\FragmentShader2D.glsl" />
     <None Include="Shaders\FragmentShaderEnv.glsl" />
     <None Include="Shaders\FragmentShaderSkybox.glsl" />
+    <None Include="Shaders\SSAOBlurFragmentShader.glsl" />
+    <None Include="Shaders\SSAOBlurVertexShader.glsl" />
+    <None Include="Shaders\SSAOGeometryFragmentShader.glsl" />
+    <None Include="Shaders\SSAOGeometryVertexShader.glsl" />
+    <None Include="Shaders\SSAOLightingFragmentShader.glsl" />
+    <None Include="Shaders\SSAOLightingVertexShader.glsl" />
+    <None Include="Shaders\SSAOOcclusionFragmentShader.glsl" />
+    <None Include="Shaders\SSAOOcclusionVertexShader.glsl" />
     <None Include="Shaders\VertexShader.glsl" />
     <None Include="Shaders\VertexShader2D.glsl" />
     <None Include="Shaders\VertexShaderEnv.glsl" />

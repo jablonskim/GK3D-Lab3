@@ -117,6 +117,18 @@ public:
 	static constexpr char* VertexShaderEnvPath = "Shaders/VertexShaderEnv.glsl";
 	static constexpr char* FragmentShaderEnvPath = "Shaders/FragmentShaderEnv.glsl";
 
+	static constexpr char* VertexShaderSSAOGeometryPath = "Shaders/SSAOGeometryVertexShader.glsl";
+	static constexpr char* FragmentShaderSSAOGeometryPath = "Shaders/SSAOGeometryFragmentShader.glsl";
+
+	static constexpr char* VertexShaderSSAOOcclusionPath = "Shaders/SSAOOcclusionVertexShader.glsl";
+	static constexpr char* FragmentShaderSSAOOcclusionPath = "Shaders/SSAOOcclusionFragmentShader.glsl";
+
+	static constexpr char* VertexShaderSSAOBlurPath = "Shaders/SSAOBlurVertexShader.glsl";
+	static constexpr char* FragmentShaderSSAOBlurPath = "Shaders/SSAOBlurFragmentShader.glsl";
+
+	static constexpr char* VertexShaderSSAOLightingPath = "Shaders/SSAOLightingVertexShader.glsl";
+	static constexpr char* FragmentShaderSSAOLightingPath = "Shaders/SSAOLightingFragmentShader.glsl";
+
 	static constexpr char* LampModelPath = "Models/lamp/Fl_l_1.3DS";
 	static constexpr char* TreeModelPath = "Models/fir1_3ds/firtree1.3ds";
 	static constexpr char* BenchModelPath = "Models/bench/bench_v01.obj";
