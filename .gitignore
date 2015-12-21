@@ -197,3 +197,4 @@ FakesAssemblies/
 
 # Third Party Software
 third_party/
+*.opendb
