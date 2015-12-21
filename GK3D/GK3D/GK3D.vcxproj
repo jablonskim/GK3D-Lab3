@@ -149,8 +149,6 @@ copy "$(SolutionDir)\third_party\libnoise\bin\libnoise.dll" "$(TargetDir)"</Comm
   <ItemGroup>
     <ClCompile Include="Sources\Application.cpp" />
     <ClCompile Include="Sources\Camera.cpp" />
-    <ClCompile Include="Sources\Cubemap.cpp" />
-    <ClCompile Include="Sources\EnvironmentMapping.cpp" />
     <ClCompile Include="Sources\Framebuffer.cpp" />
     <ClCompile Include="Sources\Input.cpp" />
     <ClCompile Include="Sources\Light.cpp" />
@@ -162,13 +160,12 @@ copy "$(SolutionDir)\third_party\libnoise\bin\libnoise.dll" "$(TargetDir)"</Comm
     <ClCompile Include="Sources\Shader.cpp" />
     <ClCompile Include="Sources\ShaderProgram.cpp" />
     <ClCompile Include="Sources\SpotLight.cpp" />
+    <ClCompile Include="Sources\SSAO.cpp" />
     <ClCompile Include="Sources\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\Application.h" />
     <ClInclude Include="Sources\Camera.h" />
-    <ClInclude Include="Sources\Cubemap.h" />
-    <ClInclude Include="Sources\EnvironmentMapping.h" />
     <ClInclude Include="Sources\Framebuffer.h" />
     <ClInclude Include="Sources\Includes.h" />
     <ClInclude Include="Sources\Input.h" />
@@ -184,6 +181,7 @@ copy "$(SolutionDir)\third_party\libnoise\bin\libnoise.dll" "$(TargetDir)"</Comm
     <ClInclude Include="Sources\ShaderProgram.h" />
     <ClInclude Include="Sources\ShaderType.h" />
     <ClInclude Include="Sources\SpotLight.h" />
+    <ClInclude Include="Sources\SSAO.h" />
     <ClInclude Include="Sources\Texture.h" />
     <ClInclude Include="Sources\Vertex.h" />
   </ItemGroup>

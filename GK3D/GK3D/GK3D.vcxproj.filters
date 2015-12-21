@@ -60,10 +60,7 @@
     <ClCompile Include="Sources\Framebuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Cubemap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\EnvironmentMapping.cpp">
+    <ClCompile Include="Sources\SSAO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -125,10 +122,7 @@
     <ClInclude Include="Sources\Framebuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Cubemap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sources\EnvironmentMapping.h">
+    <ClInclude Include="Sources\SSAO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
