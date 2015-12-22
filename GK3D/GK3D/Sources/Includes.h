@@ -8,6 +8,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <random>
 
 #define GLEW_STATIC
 #include <GL/glew.h>

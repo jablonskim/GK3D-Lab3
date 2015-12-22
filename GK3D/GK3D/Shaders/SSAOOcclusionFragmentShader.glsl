@@ -2,7 +2,9 @@
 
 in vec2 tex_coord;
 
-out float occlusion;
+// TODO: change
+out vec4 color;
+//out float occlusion;
 
 uniform sampler2D position_depth_buffer;
 uniform sampler2D normal_buffer;
@@ -29,7 +31,7 @@ void main()
 	vec3 btg = cross(normal, tg);
 	mat3 tbn = mat3(tg, btg, normal);
 
-	occlusion = 0.0f;
+	float occlusion = 0.0f;
 
 	for(int i = 0; i < kernel_size; ++i)
 	{
@@ -47,4 +49,7 @@ void main()
 	}
 
 	occlusion = 1 - (occlusion / kernel_size);
+
+	// TODO: change
+	color = vec4(occlusion, occlusion, occlusion, 1.0f);
 }

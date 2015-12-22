@@ -20,7 +20,6 @@ void main()
 	gl_Position = projection_matrix * view_position;
     fragment_position = vec3(view_position);
     
-    // TODO: czy view space?
     mat3 normalMatrix = transpose(inverse(mat3(view_matrix * model_matrix)));
     normal = normalMatrix * v_normal;
 

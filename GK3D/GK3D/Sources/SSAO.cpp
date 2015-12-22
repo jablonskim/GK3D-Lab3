@@ -1,41 +1,195 @@
 #include "SSAO.h"
 
-SSAO::SSAO()
+SSAO::SSAO(int width, int height) :
+	width(width),
+	height(height)
 {
-	geometry_program = ShaderProgram::create(Settings::VertexShaderSSAOGeometryPath, Settings::FragmentShaderSSAOGeometryPath);
+	screen_quad = Model::createPostprocessingQuad();
 
+	geometry_program = ShaderProgram::create(Settings::VertexShaderSSAOGeometryPath, Settings::FragmentShaderSSAOGeometryPath);
 	if (!geometry_program)
-	{
 		exit(EXIT_FAILURE);
-	}
 
 	occlusion_program = ShaderProgram::create(Settings::VertexShaderSSAOOcclusionPath, Settings::FragmentShaderSSAOOcclusionPath);
-
 	if (!occlusion_program)
-	{
 		exit(EXIT_FAILURE);
-	}
 
 	/*blur_program = ShaderProgram::create(Settings::VertexShaderSSAOBlurPath, Settings::FragmentShaderSSAOBlurPath);
 	lighting_program = ShaderProgram::create(Settings::VertexShaderSSAOLightingPath, Settings::FragmentShaderSSAOLightingPath);*/
+
+	initOcclusionBuffers();
+	
+	createGeometryFbo();
+	
+	createSampleKernel();
+	createNoiseBuffer();
 }
 
 SSAO::~SSAO()
 {
 }
 
-void SSAO::render(std::function<void(std::shared_ptr<ShaderProgram>&)> geometry_action)
+void SSAO::render(glm::mat4& projection, std::function<void(std::shared_ptr<ShaderProgram>&)> geometry_action)
 {
-	geometry_program->use();
+	// Geometry pass
+	glBindFramebuffer(GL_FRAMEBUFFER, geometry_fbo);
 
+	geometry_program->use();
 	geometry_action(geometry_program);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// Occlusion pass
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	occlusion_program->use();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, position_depth_buffer);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, normal_buffer);
+
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, noise_buffer);
+
+	// TODO: from config
+	for (GLuint i = 0; i < 64; ++i)
+		glUniform3fv(occlusion_program->getUniformLocation(("samples[" + std::to_string(i) + "]").c_str()), 1, &sample_kernel[i][0]);
+
+	glUniformMatrix4fv(occlusion_program->getUniformLocation(Settings::ShaderProjectionMatrixLocationName), 1, GL_FALSE, glm::value_ptr(projection));
+	
+	screen_quad->draw(occlusion_program);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-GLuint SSAO::create_fbo()
+void SSAO::createGeometryFbo()
 {
-	GLuint fbo;
+	glGenFramebuffers(1, &geometry_fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, geometry_fbo);
 
+	createPositionDepthBuffer();
+	createNormalBuffer();
+	createColorBuffer();
 
+	GLuint attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+	glDrawBuffers(3, attachments);
 
-	return fbo;
+	GLuint rbo_depth;
+
+	glGenRenderbuffers(1, &rbo_depth);
+	glBindRenderbuffer(GL_RENDERBUFFER, rbo_depth);
+
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo_depth);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		std::cerr << "Geometry Framebuffer not complete!" << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void SSAO::createPositionDepthBuffer()
+{
+	glGenTextures(1, &position_depth_buffer);
+	glBindTexture(GL_TEXTURE_2D, position_depth_buffer);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, position_depth_buffer, 0);
+}
+
+void SSAO::createNormalBuffer()
+{
+	glGenTextures(1, &normal_buffer);
+	glBindTexture(GL_TEXTURE_2D, normal_buffer);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, normal_buffer, 0);
+}
+
+void SSAO::createColorBuffer()
+{
+	glGenTextures(1, &color_buffer);
+	glBindTexture(GL_TEXTURE_2D, color_buffer);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, color_buffer, 0);
+}
+
+void SSAO::createSampleKernel()
+{
+	std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0);
+	std::default_random_engine generator;
+
+	for (GLuint i = 0; i < 64; ++i)
+	{
+		glm::vec3 sample(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, randomFloats(generator));
+		sample = glm::normalize(sample);
+		sample *= randomFloats(generator);
+
+		// TODO: from config
+		GLfloat scale = GLfloat(i) / 64.0;
+
+		scale = lerp(0.1f, 1.0f, scale * scale);
+		sample *= scale;
+
+		sample_kernel.push_back(sample);
+	}
+}
+
+void SSAO::createNoiseBuffer()
+{
+	std::vector<glm::vec3> noise_vec;
+
+	std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0);
+	std::default_random_engine generator;
+
+	// TODO: from config
+	for (GLuint i = 0; i < 16; i++)
+	{
+		glm::vec3 noise(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, 0.0f);
+		noise_vec.push_back(noise);
+	}
+
+	glGenTextures(1, &noise_buffer);
+	glBindTexture(GL_TEXTURE_2D, noise_buffer);
+
+	// TODO: size from config
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, 4, 4, 0, GL_RGB, GL_FLOAT, &noise_vec[0]);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+}
+
+void SSAO::initOcclusionBuffers()
+{
+	occlusion_program->use();
+
+	glUniform1i(occlusion_program->getUniformLocation(Settings::ShaderSSAOPositionDepthBufferName), 0);
+	glUniform1i(occlusion_program->getUniformLocation(Settings::ShaderSSAONormalBufferName), 1);
+	glUniform1i(occlusion_program->getUniformLocation(Settings::ShaderSSAONoiseBufferName), 2);
+}
+
+GLfloat SSAO::lerp(GLfloat a, GLfloat b, GLfloat f)
+{
+	return a + f * (b - a);
 }

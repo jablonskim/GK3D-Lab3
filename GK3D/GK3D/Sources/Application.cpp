@@ -45,7 +45,7 @@ int Application::run()
 	glEnable(GL_CLIP_DISTANCE0);
 	glDisable(GL_MULTISAMPLE);
 
-	ssao = std::make_shared<SSAO>();
+	ssao = std::make_shared<SSAO>(current_width, current_height);
 
 	camera = std::make_shared<Camera>(current_width, current_height);
 
@@ -56,7 +56,7 @@ int Application::run()
 		glfwPollEvents();
 
 		Input::instance()->handleInput(camera, [this]() { terrain->swapTextures(); });
-		ssao->render([this](auto p) { renderGeometry(p); });
+		ssao->render(camera->getProjectionMatrix(), [this](auto p) { renderGeometry(p); });
 
 		glfwSwapBuffers(window);
 	}
