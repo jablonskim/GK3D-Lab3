@@ -14,10 +14,10 @@ class PointLight :
 	public Light
 {
 public:
-	PointLight(std::shared_ptr<ShaderProgram> prog, glm::vec3 col = glm::vec3(), glm::vec3 pos = glm::vec3());
+	PointLight(glm::vec3 col = glm::vec3(), glm::vec3 pos = glm::vec3());
 	virtual ~PointLight();
 
-	virtual void use();
+	virtual void use(std::shared_ptr<ShaderProgram> &program);
 	void setBroken(bool broken = true);
 
 protected:

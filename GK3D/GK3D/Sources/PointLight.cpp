@@ -1,7 +1,7 @@
 #include "PointLight.h"
 
-PointLight::PointLight(std::shared_ptr<ShaderProgram> prog, glm::vec3 col, glm::vec3 pos) :
-	Light(prog, col, pos),
+PointLight::PointLight(glm::vec3 col, glm::vec3 pos) :
+	Light(col, pos),
 	is_broken(false),
 	broken_state(BrokenState::Uninitialized)
 {
@@ -12,12 +12,12 @@ PointLight::~PointLight()
 {
 }
 
-void PointLight::use()
+void PointLight::use(std::shared_ptr<ShaderProgram> &program)
 {
 	if (is_broken)
 		simulateBroken();
 
-	Light::use();
+	Light::use(program);
 }
 
 void PointLight::setBroken(bool broken)

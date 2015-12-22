@@ -3,18 +3,26 @@
 SSAO::SSAO()
 {
 	geometry_program = ShaderProgram::create(Settings::VertexShaderSSAOGeometryPath, Settings::FragmentShaderSSAOGeometryPath);
-	occlusion_program = ShaderProgram::create(Settings::VertexShaderSSAOOcclusionPath, Settings::FragmentShaderSSAOOcclusionPath);
-	blur_program = ShaderProgram::create(Settings::VertexShaderSSAOBlurPath, Settings::FragmentShaderSSAOBlurPath);
-	lighting_program = ShaderProgram::create(Settings::VertexShaderSSAOLightingPath, Settings::FragmentShaderSSAOLightingPath);
 
-	if (!geometry_program || !occlusion_program || !blur_program || !lighting_program)
+	if (!geometry_program)
 	{
 		exit(EXIT_FAILURE);
 	}
+
+	/*occlusion_program = ShaderProgram::create(Settings::VertexShaderSSAOOcclusionPath, Settings::FragmentShaderSSAOOcclusionPath);
+	blur_program = ShaderProgram::create(Settings::VertexShaderSSAOBlurPath, Settings::FragmentShaderSSAOBlurPath);
+	lighting_program = ShaderProgram::create(Settings::VertexShaderSSAOLightingPath, Settings::FragmentShaderSSAOLightingPath);*/
 }
 
 SSAO::~SSAO()
 {
+}
+
+void SSAO::render(std::function<void(std::shared_ptr<ShaderProgram>&)> geometry_action)
+{
+	geometry_program->use();
+
+	geometry_action(geometry_program);
 }
 
 GLuint SSAO::create_fbo()

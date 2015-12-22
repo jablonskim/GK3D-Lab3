@@ -18,7 +18,7 @@ Postprocessing::Postprocessing(int width, int height) :
 	if (!right_plane->check())
 		return;
 
-	quad = Model::createPostprocessingQuad(program);
+	quad = Model::createPostprocessingQuad();
 
 	initialized = true;
 }
@@ -34,7 +34,9 @@ bool Postprocessing::check()
 
 void Postprocessing::render(std::function<void(bool)> render_action)
 {
-	left_plane->render([&render_action]() { render_action(false); });
+	// TODO: remove
+
+	/*left_plane->render([&render_action]() { render_action(false); });
 	right_plane->render([&render_action]() { render_action(true); });
 
 	glClearColor(1.f, 1.f, 1.f, 1.f);
@@ -52,7 +54,7 @@ void Postprocessing::render(std::function<void(bool)> render_action)
 
 	right_plane->useTexture();
 	glUniform1i(program->getUniformLocation(Settings::Shader2DClipDirectionLocationName), 1);
-	quad->draw();
+	quad->draw();*/
 }
 
 

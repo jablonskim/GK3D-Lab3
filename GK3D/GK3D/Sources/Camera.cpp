@@ -1,7 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera(std::shared_ptr<ShaderProgram> prog, int screen_width, int screen_height) :
-	program(prog),
+Camera::Camera(int screen_width, int screen_height) :
 	position(glm::vec3(0.f, 0.3f, 0.6f)),
 	front(glm::vec3(0.0f, 0.0f, -1.0f)),
 	world_up(glm::vec3(0.f, 1.f, 0.f)),
@@ -16,7 +15,7 @@ Camera::Camera(std::shared_ptr<ShaderProgram> prog, int screen_width, int screen
 	GLfloat ratio = static_cast<GLfloat>(screen_width) / static_cast<GLfloat>(screen_height);
 	projection = glm::perspective(glm::radians(Settings::FieldOfView), ratio, Settings::PerspectiveNear, Settings::PerspectiveFar);
 
-	light = std::make_shared<SpotLight>(program, glm::vec3(Settings::SpotLightR, Settings::SpotLightG, Settings::SpotLightB));
+	light = std::make_shared<SpotLight>(glm::vec3(Settings::SpotLightR, Settings::SpotLightG, Settings::SpotLightB));
 	light->setAngles(Settings::SpotLightAngle, Settings::SpotLightSoft);
 
 	update();
@@ -121,7 +120,10 @@ void Camera::fogDec()
 
 void Camera::use(bool allow_wireframe)
 {
-	glPolygonMode(GL_FRONT_AND_BACK, (is_wireframe && allow_wireframe) ? GL_LINE : GL_FILL);
+	// TODO: remove
+	// TODO: remove wireframe
+
+	/*glPolygonMode(GL_FRONT_AND_BACK, (is_wireframe && allow_wireframe) ? GL_LINE : GL_FILL);
 
 	GLint projection_mat = program->getUniformLocation(Settings::ShaderProjectionMatrixLocationName);
 	glUniformMatrix4fv(projection_mat, 1, GL_FALSE, glm::value_ptr(projection));
@@ -145,7 +147,18 @@ void Camera::use(bool allow_wireframe)
 
 	light->setPosition(position);
 	light->setDirection(front);
-	light->use();
+	light->use();*/
+}
+
+void Camera::useGeometry(std::shared_ptr<ShaderProgram>& program)
+{
+	GLint projection_mat = program->getUniformLocation(Settings::ShaderProjectionMatrixLocationName);
+	glUniformMatrix4fv(projection_mat, 1, GL_FALSE, glm::value_ptr(projection));
+
+	view = glm::lookAt(position, position + front, up);
+
+	GLint view_mat = program->getUniformLocation(Settings::ShaderViewMatrixLocationName);
+	glUniformMatrix4fv(view_mat, 1, GL_FALSE, glm::value_ptr(view));
 }
 
 glm::mat4 & Camera::getProjectionMatrix()

@@ -10,7 +10,7 @@
 class Camera
 {
 public:
-	Camera(std::shared_ptr<ShaderProgram> prog, int screen_width, int screen_height);
+	Camera(int screen_width, int screen_height);
 	~Camera();
 
 	void move(MoveDirection direction, GLfloat delta);
@@ -21,6 +21,7 @@ public:
 	void fogInc();
 	void fogDec();
 	void use(bool allow_wireframe);
+	void useGeometry(std::shared_ptr<ShaderProgram> &program);
 
 	glm::mat4 & getProjectionMatrix();
 	glm::mat4 & getViewMatrix();
@@ -30,7 +31,6 @@ public:
 private:
 	void update();
 
-	std::shared_ptr<ShaderProgram> program;
 	std::shared_ptr<SpotLight> light;
 
 	glm::mat4 projection;

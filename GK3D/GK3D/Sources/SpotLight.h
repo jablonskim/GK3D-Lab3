@@ -6,7 +6,7 @@ class SpotLight :
 	public Light
 {
 public:
-	SpotLight(std::shared_ptr<ShaderProgram> prog, glm::vec3 col = glm::vec3(), glm::vec3 pos = glm::vec3(), 
+	SpotLight(glm::vec3 col = glm::vec3(), glm::vec3 pos = glm::vec3(), 
 		glm::vec3 dir = glm::vec3(), float angle = 30.f, float soft_angle = 0.f);
 	virtual ~SpotLight();
 
@@ -14,7 +14,7 @@ public:
 	void setDirection(glm::vec3 dir);
 	void changeOnOff();
 
-	virtual void use();
+	virtual void use(std::shared_ptr<ShaderProgram> &program);
 
 protected:
 	virtual int getId();

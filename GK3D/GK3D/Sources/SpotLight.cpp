@@ -1,7 +1,7 @@
 #include "SpotLight.h"
 
-SpotLight::SpotLight(std::shared_ptr<ShaderProgram> prog, glm::vec3 col, glm::vec3 pos, glm::vec3 dir, float angle, float soft_angle) :
-	Light(prog, col, pos)
+SpotLight::SpotLight(glm::vec3 col, glm::vec3 pos, glm::vec3 dir, float angle, float soft_angle) :
+	Light(col, pos)
 {
 	setDirection(dir);
 	setAngles(angle, soft_angle);
@@ -28,17 +28,17 @@ void SpotLight::changeOnOff()
 	is_on = !is_on;
 }
 
-void SpotLight::use()
+void SpotLight::use(std::shared_ptr<ShaderProgram> &program)
 {
-	Light::use();
+	Light::use(program);
 
-	GLint dir_loc = getUniformLocation(Settings::ShaderSpotLightsArrayLocationName, Settings::ShaderSpotLightDirectionLocationName);
+	GLint dir_loc = getUniformLocation(program, Settings::ShaderSpotLightsArrayLocationName, Settings::ShaderSpotLightDirectionLocationName);
 	glUniform3fv(dir_loc, 1, glm::value_ptr(direction));
 
-	GLint inner_loc = getUniformLocation(Settings::ShaderSpotLightsArrayLocationName, Settings::ShaderSpotLightInnerAngleLocationName);
+	GLint inner_loc = getUniformLocation(program, Settings::ShaderSpotLightsArrayLocationName, Settings::ShaderSpotLightInnerAngleLocationName);
 	glUniform1f(inner_loc, inner_angle);
 
-	GLint outer_loc = getUniformLocation(Settings::ShaderSpotLightsArrayLocationName, Settings::ShaderSpotLightOuterAngleLocationName);
+	GLint outer_loc = getUniformLocation(program, Settings::ShaderSpotLightsArrayLocationName, Settings::ShaderSpotLightOuterAngleLocationName);
 	glUniform1f(outer_loc, outer_angle);
 }
 

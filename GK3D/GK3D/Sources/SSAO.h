@@ -10,6 +10,8 @@ public:
 	SSAO();
 	~SSAO();
 
+	void render(std::function<void(std::shared_ptr<ShaderProgram>&)> geometry_action);
+
 private:
 	std::shared_ptr<ShaderProgram> geometry_program;
 	std::shared_ptr<ShaderProgram> occlusion_program;

@@ -27,6 +27,9 @@ private:
 	bool createWindow();
 	void createModels();
 	void renderFrame(bool allow_wireframe);
+
+	void renderGeometry(std::shared_ptr<ShaderProgram> &program);
+
 	float getPerlin(float x, float y);
 	glm::vec3 getVecFromPerlin(float x, float z);
 
@@ -36,8 +39,6 @@ private:
 
 	GLFWwindow* window;
 	std::shared_ptr<SSAO> ssao;
-	std::shared_ptr<ShaderProgram> program;
-	std::shared_ptr<Postprocessing> postprocessing;
 	std::shared_ptr<Camera> camera;
 
 	std::shared_ptr<Model> terrain;

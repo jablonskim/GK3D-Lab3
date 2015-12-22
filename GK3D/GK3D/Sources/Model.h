@@ -8,15 +8,15 @@
 class Model
 {
 public:
-	static std::shared_ptr<Model> fromMeshes(std::vector<std::shared_ptr<Mesh>> mesh, std::shared_ptr<ShaderProgram> prog);
-	static std::shared_ptr<Model> createTerrain(std::shared_ptr<ShaderProgram> prog);
-	static std::shared_ptr<Model> createCube(std::shared_ptr<ShaderProgram> prog);
-	static std::shared_ptr<Model> createSkybox(std::shared_ptr<ShaderProgram> prog);
-	static std::shared_ptr<Model> createPostprocessingQuad(std::shared_ptr<ShaderProgram> prog);
-	static std::shared_ptr<Model> createSphere(std::shared_ptr<ShaderProgram> prog);
+	static std::shared_ptr<Model> fromMeshes(std::vector<std::shared_ptr<Mesh>> mesh);
+	static std::shared_ptr<Model> createTerrain();
+	static std::shared_ptr<Model> createCube();
+	static std::shared_ptr<Model> createSkybox();
+	static std::shared_ptr<Model> createPostprocessingQuad();
+	static std::shared_ptr<Model> createSphere();
 
 	~Model();
-	void draw();
+	void draw(std::shared_ptr<ShaderProgram> &program);
 	void setColor(glm::vec4 col);
 	void setMatrix(glm::mat4 matrix);
 	void setMatrixFromDefaults(glm::mat4 base, glm::vec3 translation, GLfloat scale, GLfloat angle, glm::vec3 axis);
@@ -25,13 +25,12 @@ public:
 	void swapTextures();
 
 private:
-	Model(std::shared_ptr<ShaderProgram> prog, std::vector<std::shared_ptr<Mesh>> meshes);
+	Model(std::vector<std::shared_ptr<Mesh>> meshes);
 
-	void useColor();
-	void useMatrix();
-	void useTextures();
+	void useColor(std::shared_ptr<ShaderProgram> &program);
+	void useMatrix(std::shared_ptr<ShaderProgram> &program);
+	void useTextures(std::shared_ptr<ShaderProgram> &program);
 
-	std::shared_ptr<ShaderProgram> program;
 	std::vector<std::shared_ptr<Mesh>> model_meshes;
 	std::vector<std::shared_ptr<Texture>> textures;
 	std::shared_ptr<Texture> swap_texture;

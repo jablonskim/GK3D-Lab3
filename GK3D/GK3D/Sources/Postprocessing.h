@@ -9,6 +9,7 @@
 
 class Postprocessing
 {
+	// TODO: remove
 public:
 	Postprocessing(int width, int height);
 	~Postprocessing();

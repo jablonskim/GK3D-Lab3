@@ -1,7 +1,6 @@
 #include "Texture.h"
 
-Texture::Texture(std::shared_ptr<ShaderProgram> prog) :
-	program(prog),
+Texture::Texture() :
 	width(0),
 	height(0),
 	texture(0)
@@ -38,9 +37,9 @@ bool Texture::loadFromFile(const char * filename, bool no_repeat)
 	return true;
 }
 
-std::shared_ptr<Texture> Texture::fromFile(const char * filename, std::shared_ptr<ShaderProgram> prog, bool no_repeat)
+std::shared_ptr<Texture> Texture::fromFile(const char * filename, bool no_repeat)
 {
-	auto t = std::shared_ptr<Texture>(new Texture(prog));
+	auto t = std::shared_ptr<Texture>(new Texture());
 
 	if (!t->loadFromFile(filename, no_repeat))
 		return std::shared_ptr<Texture>();
@@ -48,7 +47,7 @@ std::shared_ptr<Texture> Texture::fromFile(const char * filename, std::shared_pt
 	return t;
 }
 
-void Texture::use(int num)
+void Texture::use(std::shared_ptr<ShaderProgram> &program, int num)
 {
 	if (num >= 0 && num < Settings::TexturesCount)
 	{
