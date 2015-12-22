@@ -9,8 +9,14 @@ SSAO::SSAO()
 		exit(EXIT_FAILURE);
 	}
 
-	/*occlusion_program = ShaderProgram::create(Settings::VertexShaderSSAOOcclusionPath, Settings::FragmentShaderSSAOOcclusionPath);
-	blur_program = ShaderProgram::create(Settings::VertexShaderSSAOBlurPath, Settings::FragmentShaderSSAOBlurPath);
+	occlusion_program = ShaderProgram::create(Settings::VertexShaderSSAOOcclusionPath, Settings::FragmentShaderSSAOOcclusionPath);
+
+	if (!occlusion_program)
+	{
+		exit(EXIT_FAILURE);
+	}
+
+	/*blur_program = ShaderProgram::create(Settings::VertexShaderSSAOBlurPath, Settings::FragmentShaderSSAOBlurPath);
 	lighting_program = ShaderProgram::create(Settings::VertexShaderSSAOLightingPath, Settings::FragmentShaderSSAOLightingPath);*/
 }
 

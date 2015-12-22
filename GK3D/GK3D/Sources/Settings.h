@@ -181,6 +181,11 @@ public:
 	static constexpr char* ShaderSkyboxLocationName = "skybox";
 	static constexpr char* Shader2DBlurLimitLocationName = "blur_brightness_limit";
 
+	static constexpr char* ShaderSSAOPositionDepthBufferName = "position_depth_buffer";
+	static constexpr char* ShaderSSAONormalBufferName = "normal_buffer";
+	static constexpr char* ShaderSSAOColorBufferName = "color_buffer";
+	static constexpr char* ShaderSSAONoiseBufferName = "noise_buffer";
+
 private:
 	Settings() = delete;
 	Settings(const Settings &) = delete;
