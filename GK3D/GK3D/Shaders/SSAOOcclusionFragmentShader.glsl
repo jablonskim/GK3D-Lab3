@@ -14,8 +14,12 @@ uniform vec3 samples[256];
 uniform int kernel_size;
 uniform float radius;
 
-// TODO: from config
-const vec2 noise_scale = vec2(1920.0f / 4.0f, 1080.0f / 4.0f);
+uniform float screen_width;
+uniform float screen_height;
+
+uniform int noise_size;
+
+vec2 noise_scale = vec2(screen_width / noise_size, screen_height / noise_size);
 
 void main()
 {

@@ -8,8 +8,7 @@ out vec4 color;
 
 uniform sampler2D occlusion;
 
-// TODO: config
-const int blur_size = 4;
+uniform int blur_size;
 
 void main() 
 {
@@ -22,7 +21,7 @@ void main()
 		for (int y = 0; y < blur_size; ++y) 
 		{
 			// TODO: config
-			vec2 offset = (vec2(-2.0) + vec2(float(x), float(y))) * texel_size;
+			vec2 offset = (vec2(-float(blur_size / 2)) + vec2(float(x), float(y))) * texel_size;
 			result += texture(occlusion, tex_coord + offset).r;
 		}
 	}

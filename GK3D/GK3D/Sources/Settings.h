@@ -81,6 +81,7 @@ public:
 
 	static const int SSAOKernelSize = 64;
 	static constexpr float SSAORadius = 1.0f;
+	static const int SSAONoiseSize = 4;
 
 	static constexpr char* VertexShaderSSAOGeometryPath = "Shaders/SSAOGeometryVertexShader.glsl";
 	static constexpr char* FragmentShaderSSAOGeometryPath = "Shaders/SSAOGeometryFragmentShader.glsl";

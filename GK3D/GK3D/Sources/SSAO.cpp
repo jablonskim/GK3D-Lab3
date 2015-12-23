@@ -79,6 +79,11 @@ void SSAO::occlusionPass(glm::mat4 & projection)
 	glUniform1i(occlusion_program->getUniformLocation("kernel_size"), Settings::SSAOKernelSize);
 	glUniform1f(occlusion_program->getUniformLocation("radius"), Settings::SSAORadius);
 
+	glUniform1f(occlusion_program->getUniformLocation("screen_width"), static_cast<float>(width));
+	glUniform1f(occlusion_program->getUniformLocation("screen_height"), static_cast<float>(height));
+
+	glUniform1i(occlusion_program->getUniformLocation("noise_size"), Settings::SSAONoiseSize);
+
 	screen_quad->draw(occlusion_program);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -92,6 +97,8 @@ void SSAO::blurPass()
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, occlusion_buffer);
+
+	glUniform1i(blur_program->getUniformLocation("blur_size"), Settings::SSAONoiseSize);
 
 	screen_quad->draw(blur_program);
 
@@ -222,8 +229,7 @@ void SSAO::createNoiseBuffer()
 	std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0);
 	std::default_random_engine generator;
 
-	// TODO: from config
-	for (GLuint i = 0; i < 16; i++)
+	for (GLuint i = 0; i < Settings::SSAONoiseSize * Settings::SSAONoiseSize; i++)
 	{
 		glm::vec3 noise(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, 0.0f);
 		noise_vec.push_back(noise);
@@ -232,8 +238,7 @@ void SSAO::createNoiseBuffer()
 	glGenTextures(1, &noise_buffer);
 	glBindTexture(GL_TEXTURE_2D, noise_buffer);
 
-	// TODO: size from config
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, 4, 4, 0, GL_RGB, GL_FLOAT, &noise_vec[0]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, Settings::SSAONoiseSize, Settings::SSAONoiseSize, 0, GL_RGB, GL_FLOAT, &noise_vec[0]);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
