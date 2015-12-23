@@ -10,11 +10,9 @@ uniform sampler2D noise_buffer;
 
 uniform mat4 projection_matrix;
 
-uniform vec3 samples[64];
-
-// TODO: form config
-int kernel_size = 64;
-float radius = 1.0f;
+uniform vec3 samples[256];
+uniform int kernel_size;
+uniform float radius;
 
 // TODO: from config
 const vec2 noise_scale = vec2(1920.0f / 4.0f, 1080.0f / 4.0f);

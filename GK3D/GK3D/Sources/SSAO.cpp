@@ -71,11 +71,13 @@ void SSAO::occlusionPass(glm::mat4 & projection)
 	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, noise_buffer);
 
-	// TODO: from config
-	for (GLuint i = 0; i < 64; ++i)
+	for (GLuint i = 0; i < Settings::SSAOKernelSize; ++i)
 		glUniform3fv(occlusion_program->getUniformLocation(("samples[" + std::to_string(i) + "]").c_str()), 1, &sample_kernel[i][0]);
 
 	glUniformMatrix4fv(occlusion_program->getUniformLocation(Settings::ShaderProjectionMatrixLocationName), 1, GL_FALSE, glm::value_ptr(projection));
+
+	glUniform1i(occlusion_program->getUniformLocation("kernel_size"), Settings::SSAOKernelSize);
+	glUniform1f(occlusion_program->getUniformLocation("radius"), Settings::SSAORadius);
 
 	screen_quad->draw(occlusion_program);
 
@@ -198,14 +200,13 @@ void SSAO::createSampleKernel()
 	std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0);
 	std::default_random_engine generator;
 
-	for (GLuint i = 0; i < 64; ++i)
+	for (GLuint i = 0; i < Settings::SSAOKernelSize; ++i)
 	{
 		glm::vec3 sample(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, randomFloats(generator));
 		sample = glm::normalize(sample);
 		sample *= randomFloats(generator);
 
-		// TODO: from config
-		GLfloat scale = GLfloat(i) / 64.0f;
+		GLfloat scale = static_cast<GLfloat>(i) / static_cast<GLfloat>(Settings::SSAOKernelSize);
 
 		scale = lerp(0.1f, 1.0f, scale * scale);
 		sample *= scale;

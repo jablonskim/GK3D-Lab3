@@ -79,6 +79,9 @@ public:
 	static constexpr float PointLightLinearFactor = 0.35f;
 	static constexpr float PointLightQuadraticFactor = 0.44f;
 
+	static const int SSAOKernelSize = 64;
+	static constexpr float SSAORadius = 1.0f;
+
 	static constexpr char* VertexShaderSSAOGeometryPath = "Shaders/SSAOGeometryVertexShader.glsl";
 	static constexpr char* FragmentShaderSSAOGeometryPath = "Shaders/SSAOGeometryFragmentShader.glsl";
 
