@@ -14,12 +14,16 @@ SSAO::SSAO(int width, int height) :
 	if (!occlusion_program)
 		exit(EXIT_FAILURE);
 
-	/*blur_program = ShaderProgram::create(Settings::VertexShaderSSAOBlurPath, Settings::FragmentShaderSSAOBlurPath);
-	lighting_program = ShaderProgram::create(Settings::VertexShaderSSAOLightingPath, Settings::FragmentShaderSSAOLightingPath);*/
+	blur_program = ShaderProgram::create(Settings::VertexShaderSSAOBlurPath, Settings::FragmentShaderSSAOBlurPath);
+	if (!blur_program)
+		exit(EXIT_FAILURE);
+
+	/*lighting_program = ShaderProgram::create(Settings::VertexShaderSSAOLightingPath, Settings::FragmentShaderSSAOLightingPath);*/
 
 	initOcclusionBuffers();
 	
 	createGeometryFbo();
+	createOcclusionFbo();
 	
 	createSampleKernel();
 	createNoiseBuffer();
@@ -31,17 +35,26 @@ SSAO::~SSAO()
 
 void SSAO::render(glm::mat4& projection, std::function<void(std::shared_ptr<ShaderProgram>&)> geometry_action)
 {
-	// Geometry pass
+	geometryPass(geometry_action);
+	occlusionPass(projection);
+	blurPass();
+}
+
+void SSAO::geometryPass(std::function<void(std::shared_ptr<ShaderProgram>&)> geometry_action)
+{
 	glBindFramebuffer(GL_FRAMEBUFFER, geometry_fbo);
 
 	geometry_program->use();
 	geometry_action(geometry_program);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
 
-	// Occlusion pass
+void SSAO::occlusionPass(glm::mat4 & projection)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, occlusion_fbo);
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 
 	occlusion_program->use();
 
@@ -59,8 +72,22 @@ void SSAO::render(glm::mat4& projection, std::function<void(std::shared_ptr<Shad
 		glUniform3fv(occlusion_program->getUniformLocation(("samples[" + std::to_string(i) + "]").c_str()), 1, &sample_kernel[i][0]);
 
 	glUniformMatrix4fv(occlusion_program->getUniformLocation(Settings::ShaderProjectionMatrixLocationName), 1, GL_FALSE, glm::value_ptr(projection));
-	
+
 	screen_quad->draw(occlusion_program);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void SSAO::blurPass()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	blur_program->use();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, occlusion_buffer);
+
+	screen_quad->draw(blur_program);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -88,6 +115,22 @@ void SSAO::createGeometryFbo()
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
 		std::cerr << "Geometry Framebuffer not complete!" << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void SSAO::createOcclusionFbo()
+{
+	glGenFramebuffers(1, &occlusion_fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, occlusion_fbo);
+
+	createOcclusionBuffer();
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		std::cerr << "Occlusion Framebuffer not complete!" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
@@ -133,6 +176,19 @@ void SSAO::createColorBuffer()
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, color_buffer, 0);
 }
 
+void SSAO::createOcclusionBuffer()
+{
+	glGenTextures(1, &occlusion_buffer);
+	glBindTexture(GL_TEXTURE_2D, occlusion_buffer);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, occlusion_buffer, 0);
+}
+
 void SSAO::createSampleKernel()
 {
 	std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0);
@@ -145,7 +201,7 @@ void SSAO::createSampleKernel()
 		sample *= randomFloats(generator);
 
 		// TODO: from config
-		GLfloat scale = GLfloat(i) / 64.0;
+		GLfloat scale = GLfloat(i) / 64.0f;
 
 		scale = lerp(0.1f, 1.0f, scale * scale);
 		sample *= scale;

@@ -25,21 +25,28 @@ private:
 	std::shared_ptr<Model> screen_quad;
 
 	GLuint geometry_fbo;
-	GLuint ssao_fbo;
+	GLuint occlusion_fbo;
 	GLuint blur_fbo;
 
 	GLuint position_depth_buffer;
 	GLuint normal_buffer;
 	GLuint color_buffer;
 	GLuint noise_buffer;
+	GLuint occlusion_buffer;
 
 	std::vector<glm::vec3> sample_kernel;
 
+	void geometryPass(std::function<void(std::shared_ptr<ShaderProgram>&)> geometry_action);
+	void occlusionPass(glm::mat4& projection);
+	void blurPass();
+
 	void createGeometryFbo();
+	void createOcclusionFbo();
 
 	void createPositionDepthBuffer();
 	void createNormalBuffer();
 	void createColorBuffer();
+	void createOcclusionBuffer();
 
 	void createSampleKernel();
 	void createNoiseBuffer();
