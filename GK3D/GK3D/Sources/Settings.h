@@ -34,7 +34,6 @@ public:
 	static const int FlashlightSwitchKey = GLFW_KEY_L;
 
 	static const int TextureChangeKey = GLFW_KEY_T;
-	static const int MultisamplingKey = GLFW_KEY_M;
 
 	static const int FogSwitchKey = GLFW_KEY_F;
 	static const int FogIncKey = GLFW_KEY_KP_ADD;

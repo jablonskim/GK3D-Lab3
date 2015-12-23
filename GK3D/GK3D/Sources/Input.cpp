@@ -20,7 +20,6 @@ Input::Input() :
 	last_x(0),
 	last_y(0),
 	firstMouseValues(true),
-	multisampling(false),
 	blur_limit(Settings::GaussianBlurBrightnessDefault)
 {
 }
@@ -87,16 +86,6 @@ void Input::actionOnKey(int key, std::function<void()> action)
 		action();
 		keys_pressed[key] = false;
 	}
-}
-
-void Input::switchMultisampling()
-{
-	multisampling = !multisampling;
-
-	if (multisampling)
-		glEnable(GL_MULTISAMPLE);
-	else
-		glDisable(GL_MULTISAMPLE);
 }
 
 void Input::incBlurLimit()
@@ -170,7 +159,6 @@ void Input::handleInput(std::shared_ptr<Camera> & camera, std::function<void()> 
 	actionOnKey(Settings::FogSwitchKey, [&camera]() { camera->switchFog(); });
 	actionOnKey(Settings::FogIncKey, [&camera]() { camera->fogInc(); });
 	actionOnKey(Settings::FogDecKey, [&camera]() { camera->fogDec(); });
-	actionOnKey(Settings::MultisamplingKey, [this]() { switchMultisampling(); });
 	actionOnKey(Settings::BlurLimitDecKey, [this]() { decBlurLimit(); });
 	actionOnKey(Settings::BlurLimitIncKey, [this]() { incBlurLimit(); });
 

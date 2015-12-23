@@ -32,7 +32,6 @@ private:
 	GLfloat getDelta();
 	void actionOnKey(int key, std::function<void()> action);
 
-	void switchMultisampling();
 	void incBlurLimit();
 	void decBlurLimit();
 
@@ -49,6 +48,5 @@ private:
 
 	GLdouble last_x, last_y;
 	bool firstMouseValues;
-	bool multisampling;
 	int blur_limit;
 };
