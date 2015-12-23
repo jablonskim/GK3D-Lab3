@@ -79,19 +79,6 @@ public:
 	static constexpr float PointLightLinearFactor = 0.35f;
 	static constexpr float PointLightQuadraticFactor = 0.44f;
 
-
-	static constexpr char* VertexShaderPath = "Shaders/VertexShader.glsl";
-	static constexpr char* FragmentShaderPath = "Shaders/FragmentShader.glsl";
-
-	static constexpr char* VertexShader2DPath = "Shaders/VertexShader2D.glsl";
-	static constexpr char* FragmentShader2DPath = "Shaders/FragmentShader2D.glsl";
-
-	static constexpr char* VertexShaderSkyboxPath = "Shaders/VertexShaderSkybox.glsl";
-	static constexpr char* FragmentShaderSkyboxPath = "Shaders/FragmentShaderSkybox.glsl";
-
-	static constexpr char* VertexShaderEnvPath = "Shaders/VertexShaderEnv.glsl";
-	static constexpr char* FragmentShaderEnvPath = "Shaders/FragmentShaderEnv.glsl";
-
 	static constexpr char* VertexShaderSSAOGeometryPath = "Shaders/SSAOGeometryVertexShader.glsl";
 	static constexpr char* FragmentShaderSSAOGeometryPath = "Shaders/SSAOGeometryFragmentShader.glsl";
 
