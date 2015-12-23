@@ -9,7 +9,6 @@
 #include "Camera.h"
 #include "Model.h"
 #include "ShaderProgram.h"
-#include "Postprocessing.h"
 #include "PointLight.h"
 #include "SSAO.h"
 

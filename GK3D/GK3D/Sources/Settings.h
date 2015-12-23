@@ -79,8 +79,6 @@ public:
 	static constexpr float PointLightLinearFactor = 0.35f;
 	static constexpr float PointLightQuadraticFactor = 0.44f;
 
-	static const int MultisamplingSamplesCount = 4;
-
 
 	static constexpr char* VertexShaderPath = "Shaders/VertexShader.glsl";
 	static constexpr char* FragmentShaderPath = "Shaders/FragmentShader.glsl";
