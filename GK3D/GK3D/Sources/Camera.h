@@ -16,15 +16,11 @@ public:
 	void move(MoveDirection direction, GLfloat delta);
 	void look(GLfloat x, GLfloat y);
 	void switchLight();
-	void switchFog();
-	void fogInc();
-	void fogDec();
 	void use(bool allow_wireframe);
 	void useGeometry(std::shared_ptr<ShaderProgram> &program);
 
 	glm::mat4 & getProjectionMatrix();
 	glm::mat4 & getViewMatrix();
-	bool getFogOn();
 	glm::vec3 & getPosition();
 
 private:
@@ -44,8 +40,5 @@ private:
 
 	GLfloat pitch;
 	GLfloat yaw;
-
-	bool fog_on;
-	int fog_intensity;
 };
 

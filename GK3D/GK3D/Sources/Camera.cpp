@@ -7,9 +7,7 @@ Camera::Camera(int screen_width, int screen_height) :
 	up(glm::vec3(0.f, 1.f, 0.f)),
 	pitch(0.f),
 	yaw(-90.f),
-	right(glm::normalize(glm::cross(front, world_up))),
-	fog_on(false),
-	fog_intensity(Settings::FogIntensityDefault)
+	right(glm::normalize(glm::cross(front, world_up)))
 {
 	GLfloat ratio = static_cast<GLfloat>(screen_width) / static_cast<GLfloat>(screen_height);
 	projection = glm::perspective(glm::radians(Settings::FieldOfView), ratio, Settings::PerspectiveNear, Settings::PerspectiveFar);
@@ -91,27 +89,6 @@ void Camera::switchLight()
 	light->changeOnOff();
 }
 
-void Camera::switchFog()
-{
-	fog_on = !fog_on;
-}
-
-void Camera::fogInc()
-{
-	fog_intensity += Settings::FogIntensityStep;
-
-	if (fog_intensity > Settings::FogIntensityMax)
-		fog_intensity = Settings::FogIntensityMax;
-}
-
-void Camera::fogDec()
-{
-	fog_intensity -= Settings::FogIntensityStep;
-
-	if (fog_intensity < Settings::FogIntensityMin)
-		fog_intensity = Settings::FogIntensityMin;
-}
-
 void Camera::use(bool allow_wireframe)
 {
 	// TODO: remove
@@ -163,11 +140,6 @@ glm::mat4 & Camera::getProjectionMatrix()
 glm::mat4 & Camera::getViewMatrix()
 {
 	return view;
-}
-
-bool Camera::getFogOn()
-{
-	return fog_on;
 }
 
 glm::vec3 & Camera::getPosition()

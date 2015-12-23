@@ -156,9 +156,6 @@ void Input::handleInput(std::shared_ptr<Camera> & camera, std::function<void()> 
 	x_move = y_move = 0;
 
 	actionOnKey(Settings::FlashlightSwitchKey, [&camera]() { camera->switchLight(); });
-	actionOnKey(Settings::FogSwitchKey, [&camera]() { camera->switchFog(); });
-	actionOnKey(Settings::FogIncKey, [&camera]() { camera->fogInc(); });
-	actionOnKey(Settings::FogDecKey, [&camera]() { camera->fogDec(); });
 	actionOnKey(Settings::BlurLimitDecKey, [this]() { decBlurLimit(); });
 	actionOnKey(Settings::BlurLimitIncKey, [this]() { incBlurLimit(); });
 

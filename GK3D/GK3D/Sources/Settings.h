@@ -35,10 +35,6 @@ public:
 
 	static const int TextureChangeKey = GLFW_KEY_T;
 
-	static const int FogSwitchKey = GLFW_KEY_F;
-	static const int FogIncKey = GLFW_KEY_KP_ADD;
-	static const int FogDecKey = GLFW_KEY_KP_SUBTRACT;
-
 	static const int BlurLimitDecKey = GLFW_KEY_LEFT_BRACKET;
 	static const int BlurLimitIncKey = GLFW_KEY_RIGHT_BRACKET;
 
@@ -85,12 +81,6 @@ public:
 	static constexpr float PointLightConstantFactor = 1.0f;
 	static constexpr float PointLightLinearFactor = 0.35f;
 	static constexpr float PointLightQuadraticFactor = 0.44f;
-
-	static const int FogIntensityMax = 2000;
-	static const int FogIntensityMin = 100;
-	static const int FogIntensityDefault = 200;
-	static const int FogIntensityStep = 5;
-	static constexpr float FogBrightness = 0.1f;
 
 	static const int GaussianBlurBrightnessStep = 5;
 	static const int GaussianBlurBrightnessDefault = 200;
