@@ -139,10 +139,6 @@ public:
 
 	static constexpr char* ShaderPointLightsArrayLocationName = "point_lights";
 
-	static constexpr char* ShaderFogOnLocationName = "fog_on";
-	static constexpr char* ShaderFogIntensityLocationName = "fog_intensity";
-	static constexpr char* ShaderFogBrightnessLocationName = "fog_brightness";
-
 	static constexpr char* ShaderTexturesLocationName = "textures";
 	static constexpr char* ShaderNumTexturesLocationName = "num_textures";
 
