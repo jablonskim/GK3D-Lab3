@@ -113,9 +113,6 @@ public:
 	static constexpr char* ExtraGrassTexture = "Textures/grass1.jpg";
 	static constexpr char* LeavesTexture = "Textures/leaves.png";
 
-	static constexpr char* SkyboxBasePath = "Textures/grimmnight";
-	static constexpr char* SkyboxExtension = ".bmp";
-
 	static constexpr char* ShaderProjectionMatrixLocationName = "projection_matrix";
 	static constexpr char* ShaderViewMatrixLocationName = "view_matrix";
 	static constexpr char* ShaderModelMatrixLocationName = "model_matrix";
@@ -148,13 +145,6 @@ public:
 
 	static constexpr char* ShaderTexturesLocationName = "textures";
 	static constexpr char* ShaderNumTexturesLocationName = "num_textures";
-
-	static constexpr char* Shader2DScreenTextureLocationName = "screen_texture";
-	static constexpr char* Shader2DClipDirectionLocationName = "clip_direction";
-	static constexpr char* Shader2DClipOffsetLocationName = "clip_offset";
-
-	static constexpr char* ShaderSkyboxLocationName = "skybox";
-	static constexpr char* Shader2DBlurLimitLocationName = "blur_brightness_limit";
 
 	static constexpr char* ShaderSSAOPositionDepthBufferName = "position_depth_buffer";
 	static constexpr char* ShaderSSAONormalBufferName = "normal_buffer";
