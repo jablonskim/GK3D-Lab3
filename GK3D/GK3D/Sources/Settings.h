@@ -35,9 +35,6 @@ public:
 
 	static const int TextureChangeKey = GLFW_KEY_T;
 
-	static const int BlurLimitDecKey = GLFW_KEY_LEFT_BRACKET;
-	static const int BlurLimitIncKey = GLFW_KEY_RIGHT_BRACKET;
-
 	static constexpr float MovementSpeed = .7f;
 	static constexpr float MouseSensitivityX = .1f;
 	static constexpr float MouseSensitivityY = .1f;
@@ -81,9 +78,6 @@ public:
 	static constexpr float PointLightConstantFactor = 1.0f;
 	static constexpr float PointLightLinearFactor = 0.35f;
 	static constexpr float PointLightQuadraticFactor = 0.44f;
-
-	static const int GaussianBlurBrightnessStep = 5;
-	static const int GaussianBlurBrightnessDefault = 200;
 
 	static const int MultisamplingSamplesCount = 4;
 

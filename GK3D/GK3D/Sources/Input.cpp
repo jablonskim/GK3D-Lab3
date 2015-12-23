@@ -19,8 +19,7 @@ Input::Input() :
 	y_move(0.f),
 	last_x(0),
 	last_y(0),
-	firstMouseValues(true),
-	blur_limit(Settings::GaussianBlurBrightnessDefault)
+	firstMouseValues(true)
 {
 }
 
@@ -88,22 +87,6 @@ void Input::actionOnKey(int key, std::function<void()> action)
 	}
 }
 
-void Input::incBlurLimit()
-{
-	blur_limit += Settings::GaussianBlurBrightnessStep;
-
-	if (blur_limit > 255)
-		blur_limit = 255;
-}
-
-void Input::decBlurLimit()
-{
-	blur_limit -= Settings::GaussianBlurBrightnessStep;
-
-	if (blur_limit < 0)
-		blur_limit = 0;
-}
-
 Input::~Input()
 {
 }
@@ -156,16 +139,9 @@ void Input::handleInput(std::shared_ptr<Camera> & camera, std::function<void()> 
 	x_move = y_move = 0;
 
 	actionOnKey(Settings::FlashlightSwitchKey, [&camera]() { camera->switchLight(); });
-	actionOnKey(Settings::BlurLimitDecKey, [this]() { decBlurLimit(); });
-	actionOnKey(Settings::BlurLimitIncKey, [this]() { incBlurLimit(); });
 
 	if (swap_texture_action != nullptr)
 	{
 		actionOnKey(Settings::TextureChangeKey, swap_texture_action);
 	}
-}
-
-int Input::getBlurLimit()
-{
-	return blur_limit;
 }
