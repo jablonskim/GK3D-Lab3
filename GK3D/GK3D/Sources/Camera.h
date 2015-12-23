@@ -17,7 +17,6 @@ public:
 	void look(GLfloat x, GLfloat y);
 	void switchLight();
 	void switchFog();
-	void switchWireframe();
 	void fogInc();
 	void fogDec();
 	void use(bool allow_wireframe);
@@ -47,7 +46,6 @@ private:
 	GLfloat yaw;
 
 	bool fog_on;
-	bool is_wireframe;
 	int fog_intensity;
 };
 

@@ -20,7 +20,6 @@ public:
 	void disableCursor(GLFWwindow * window, bool disabled);
 	void handleInput(std::shared_ptr<Camera> & camera, std::function<void()> swap_texture_action);
 
-	float getClipOffset();
 	int getBlurLimit();
 
 private:
@@ -34,8 +33,6 @@ private:
 	void actionOnKey(int key, std::function<void()> action);
 
 	void switchMultisampling();
-	void incClipOffset();
-	void decClipOffset();
 	void incBlurLimit();
 	void decBlurLimit();
 
@@ -53,6 +50,5 @@ private:
 	GLdouble last_x, last_y;
 	bool firstMouseValues;
 	bool multisampling;
-	float clip_offset;
 	int blur_limit;
 };

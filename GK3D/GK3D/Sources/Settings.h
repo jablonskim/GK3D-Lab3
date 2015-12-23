@@ -31,10 +31,6 @@ public:
 	static const int MoveForwardKey = GLFW_KEY_W;
 	static const int MoveBackwardKey = GLFW_KEY_S;
 
-	static const int WireframeModeKey = GLFW_KEY_H;
-	static const int WireframeLeftKey = GLFW_KEY_COMMA;
-	static const int WireframeRightKey = GLFW_KEY_PERIOD;
-
 	static const int FlashlightSwitchKey = GLFW_KEY_L;
 
 	static const int TextureChangeKey = GLFW_KEY_T;
@@ -96,8 +92,6 @@ public:
 	static const int FogIntensityDefault = 200;
 	static const int FogIntensityStep = 5;
 	static constexpr float FogBrightness = 0.1f;
-
-	static constexpr float ClipOffsetStep = 0.02f;
 
 	static const int GaussianBlurBrightnessStep = 5;
 	static const int GaussianBlurBrightnessDefault = 200;

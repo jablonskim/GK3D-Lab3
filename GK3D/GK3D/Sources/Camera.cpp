@@ -9,7 +9,6 @@ Camera::Camera(int screen_width, int screen_height) :
 	yaw(-90.f),
 	right(glm::normalize(glm::cross(front, world_up))),
 	fog_on(false),
-	is_wireframe(false),
 	fog_intensity(Settings::FogIntensityDefault)
 {
 	GLfloat ratio = static_cast<GLfloat>(screen_width) / static_cast<GLfloat>(screen_height);
@@ -95,11 +94,6 @@ void Camera::switchLight()
 void Camera::switchFog()
 {
 	fog_on = !fog_on;
-}
-
-void Camera::switchWireframe()
-{
-	is_wireframe = !is_wireframe;
 }
 
 void Camera::fogInc()
