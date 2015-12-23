@@ -8,14 +8,13 @@ in vec3 normal;
 in vec3 fragment_position;
 in vec2 tex_coord;
 
-// TODO: z konfiguracji
-const float NEAR = 0.01; // Projection matrix's near plane distance
-const float FAR = 1000.0f; // Projection matrix's far plane distance
+uniform float near_plane;
+uniform float far_plane;
 
 float LinearizeDepth(float depth)
 {
     float z = depth * 2.0 - 1.0;
-    return (2.0 * NEAR * FAR) / (FAR + NEAR - z * (FAR - NEAR));	
+    return (2.0 * near_plane * far_plane) / (far_plane + near_plane - z * (far_plane - near_plane));	
 }
 
 void main()

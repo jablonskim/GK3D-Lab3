@@ -134,6 +134,9 @@ public:
 	static constexpr char* ShaderSSAOColorBufferName = "color_buffer";
 	static constexpr char* ShaderSSAONoiseBufferName = "noise_buffer";
 
+	static constexpr char* ShaderSSAONearPlaneLocationName = "near_plane";
+	static constexpr char* ShaderSSAOFarPlaneLocationName = "far_plane";
+
 private:
 	Settings() = delete;
 	Settings(const Settings &) = delete;

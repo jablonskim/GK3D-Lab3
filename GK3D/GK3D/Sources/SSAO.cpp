@@ -45,6 +45,10 @@ void SSAO::geometryPass(std::function<void(std::shared_ptr<ShaderProgram>&)> geo
 	glBindFramebuffer(GL_FRAMEBUFFER, geometry_fbo);
 
 	geometry_program->use();
+
+	glUniform1f(geometry_program->getUniformLocation(Settings::ShaderSSAONearPlaneLocationName), Settings::PerspectiveNear);
+	glUniform1f(geometry_program->getUniformLocation(Settings::ShaderSSAOFarPlaneLocationName), Settings::PerspectiveFar);
+
 	geometry_action(geometry_program);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
