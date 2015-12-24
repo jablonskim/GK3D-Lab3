@@ -35,6 +35,8 @@ public:
 
 	static const int TextureChangeKey = GLFW_KEY_T;
 
+	static const int SSAOSwitchKey = GLFW_KEY_O;
+
 	static constexpr float MovementSpeed = .7f;
 	static constexpr float MouseSensitivityX = .1f;
 	static constexpr float MouseSensitivityY = .1f;

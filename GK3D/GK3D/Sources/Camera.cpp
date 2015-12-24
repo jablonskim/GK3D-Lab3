@@ -7,7 +7,8 @@ Camera::Camera(int screen_width, int screen_height) :
 	up(glm::vec3(0.f, 1.f, 0.f)),
 	pitch(0.f),
 	yaw(-90.f),
-	right(glm::normalize(glm::cross(front, world_up)))
+	right(glm::normalize(glm::cross(front, world_up))),
+	ssao_enabled(true)
 {
 	GLfloat ratio = static_cast<GLfloat>(screen_width) / static_cast<GLfloat>(screen_height);
 	projection = glm::perspective(glm::radians(Settings::FieldOfView), ratio, Settings::PerspectiveNear, Settings::PerspectiveFar);
@@ -89,6 +90,11 @@ void Camera::switchLight()
 	light->changeOnOff();
 }
 
+void Camera::switchSSAO()
+{
+	ssao_enabled = !ssao_enabled;
+}
+
 void Camera::use(bool allow_wireframe)
 {
 	// TODO: remove
@@ -141,6 +147,9 @@ void Camera::useLight(std::shared_ptr<ShaderProgram>& program)
 
 	GLint view_mat = program->getUniformLocation(Settings::ShaderViewMatrixLocationName);
 	glUniformMatrix4fv(view_mat, 1, GL_FALSE, glm::value_ptr(view));
+
+	GLint ssao_enabled_loc = program->getUniformLocation("ssao_enabled");
+	glUniform1i(ssao_enabled_loc, ssao_enabled);
 
 	light->use(program);
 }

@@ -16,6 +16,7 @@ public:
 	void move(MoveDirection direction, GLfloat delta);
 	void look(GLfloat x, GLfloat y);
 	void switchLight();
+	void switchSSAO();
 	void use(bool allow_wireframe);
 	void useGeometry(std::shared_ptr<ShaderProgram> &program);
 	void useLight(std::shared_ptr<ShaderProgram> &program);
@@ -41,5 +42,7 @@ private:
 
 	GLfloat pitch;
 	GLfloat yaw;
+
+	bool ssao_enabled;
 };
 

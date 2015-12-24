@@ -37,6 +37,7 @@ uniform sampler2D color_buffer;
 uniform sampler2D occlusion_buffer;
 
 uniform mat4 view_matrix;
+uniform bool ssao_enabled;
 
 uniform vec3 ambient_color;
 uniform float ambient_strength;
@@ -108,7 +109,7 @@ void main()
 	vec3 fragment_position = texture(position_depth_buffer, tex_coord).rgb;
 	vec3 normal = texture(normal_buffer, tex_coord).rgb;
 	vec4 fragment_color = texture(color_buffer, tex_coord);
-	float fragment_occlusion = texture(occlusion_buffer, tex_coord).r;
+	float fragment_occlusion = ssao_enabled ? texture(occlusion_buffer, tex_coord).r : 1.0f;
 
 	vec3 view_direction = normalize(-fragment_position);
 

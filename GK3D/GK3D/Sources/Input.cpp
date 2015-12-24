@@ -139,6 +139,7 @@ void Input::handleInput(std::shared_ptr<Camera> & camera, std::function<void()> 
 	x_move = y_move = 0;
 
 	actionOnKey(Settings::FlashlightSwitchKey, [&camera]() { camera->switchLight(); });
+	actionOnKey(Settings::SSAOSwitchKey, [&camera]() { camera->switchSSAO(); });
 
 	if (swap_texture_action != nullptr)
 	{
