@@ -16,5 +16,7 @@ void main()
 	vec4 fragment_color = texture(color_buffer, tex_coord);
 	float fragment_occlusion = texture(occlusion_buffer, tex_coord).r;
 
+	// TODO
+
 	color = fragment_color;
 }
