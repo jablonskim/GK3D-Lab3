@@ -28,6 +28,7 @@ private:
 	void renderFrame(bool allow_wireframe);
 
 	void renderGeometry(std::shared_ptr<ShaderProgram> &program);
+	void renderLight(std::shared_ptr<ShaderProgram> &program);
 
 	float getPerlin(float x, float y);
 	glm::vec3 getVecFromPerlin(float x, float z);

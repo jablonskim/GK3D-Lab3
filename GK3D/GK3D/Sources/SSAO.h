@@ -11,7 +11,7 @@ public:
 	SSAO(int width, int height);
 	~SSAO();
 
-	void render(glm::mat4& projection, std::function<void(std::shared_ptr<ShaderProgram>&)> geometry_action);
+	void render(glm::mat4& projection, std::function<void(std::shared_ptr<ShaderProgram>&)> geometry_action, std::function<void(std::shared_ptr<ShaderProgram>&)> lighting_action);
 
 private:
 	int width;
@@ -40,7 +40,7 @@ private:
 	void geometryPass(std::function<void(std::shared_ptr<ShaderProgram>&)> geometry_action);
 	void occlusionPass(glm::mat4& projection);
 	void blurPass();
-	void lightingPass();
+	void lightingPass(std::function<void(std::shared_ptr<ShaderProgram>&)> lighting_action);
 
 	void createGeometryFbo();
 	void createOcclusionFbo();

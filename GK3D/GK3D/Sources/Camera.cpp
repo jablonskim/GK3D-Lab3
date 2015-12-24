@@ -132,6 +132,19 @@ void Camera::useGeometry(std::shared_ptr<ShaderProgram>& program)
 	glUniformMatrix4fv(view_mat, 1, GL_FALSE, glm::value_ptr(view));
 }
 
+void Camera::useLight(std::shared_ptr<ShaderProgram>& program)
+{
+	light->setPosition(position);
+	light->setDirection(front);
+
+	view = glm::lookAt(position, position + front, up);
+
+	GLint view_mat = program->getUniformLocation(Settings::ShaderViewMatrixLocationName);
+	glUniformMatrix4fv(view_mat, 1, GL_FALSE, glm::value_ptr(view));
+
+	light->use(program);
+}
+
 glm::mat4 & Camera::getProjectionMatrix()
 {
 	return projection;

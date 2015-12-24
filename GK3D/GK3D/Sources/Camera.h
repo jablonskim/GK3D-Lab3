@@ -18,6 +18,7 @@ public:
 	void switchLight();
 	void use(bool allow_wireframe);
 	void useGeometry(std::shared_ptr<ShaderProgram> &program);
+	void useLight(std::shared_ptr<ShaderProgram> &program);
 
 	glm::mat4 & getProjectionMatrix();
 	glm::mat4 & getViewMatrix();

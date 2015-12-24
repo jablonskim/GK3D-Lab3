@@ -56,7 +56,7 @@ int Application::run()
 		glfwPollEvents();
 
 		Input::instance()->handleInput(camera, [this]() { terrain->swapTextures(); });
-		ssao->render(camera->getProjectionMatrix(), [this](auto p) { renderGeometry(p); });
+		ssao->render(camera->getProjectionMatrix(), [this](auto p) { renderGeometry(p); }, [this](auto p) { renderLight(p); });
 
 		glfwSwapBuffers(window);
 	}
@@ -233,15 +233,20 @@ void Application::renderFrame(bool allow_wireframe)
 
 void Application::renderGeometry(std::shared_ptr<ShaderProgram> &program)
 {
-	glClearColor(0.f, 0.f, 0.f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	camera->useGeometry(program);
 
 	terrain->draw(program);
 	cube->draw(program);
 
 	std::for_each(std::cbegin(models), std::cend(models), [&program](auto model) { model->draw(program); });
+}
+
+void Application::renderLight(std::shared_ptr<ShaderProgram>& program)
+{
+	camera->useLight(program);
+
+	light->use(program);
+	broken_light->use(program);
 }
 
 float Application::getPerlin(float x, float y)

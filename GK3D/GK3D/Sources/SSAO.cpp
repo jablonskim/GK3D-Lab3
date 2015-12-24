@@ -37,19 +37,22 @@ SSAO::~SSAO()
 {
 }
 
-void SSAO::render(glm::mat4& projection, std::function<void(std::shared_ptr<ShaderProgram>&)> geometry_action)
+void SSAO::render(glm::mat4& projection, std::function<void(std::shared_ptr<ShaderProgram>&)> geometry_action, std::function<void(std::shared_ptr<ShaderProgram>&)> lighting_action)
 {
 	geometryPass(geometry_action);
 	occlusionPass(projection);
 	blurPass();
-	lightingPass();
+	lightingPass(lighting_action);
 }
 
 void SSAO::geometryPass(std::function<void(std::shared_ptr<ShaderProgram>&)> geometry_action)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, geometry_fbo);
 
-	geometry_program->use();
+	glClearColor(0.f, 0.f, 0.f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	geometry_program->use(false);
 
 	glUniform1f(geometry_program->getUniformLocation(Settings::ShaderSSAONearPlaneLocationName), Settings::PerspectiveNear);
 	glUniform1f(geometry_program->getUniformLocation(Settings::ShaderSSAOFarPlaneLocationName), Settings::PerspectiveFar);
@@ -65,7 +68,7 @@ void SSAO::occlusionPass(glm::mat4 & projection)
 
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	occlusion_program->use();
+	occlusion_program->use(false);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, position_depth_buffer);
@@ -100,7 +103,7 @@ void SSAO::blurPass()
 
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	blur_program->use();
+	blur_program->use(false);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, occlusion_buffer);
@@ -112,11 +115,11 @@ void SSAO::blurPass()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void SSAO::lightingPass()
+void SSAO::lightingPass(std::function<void(std::shared_ptr<ShaderProgram>&)> lighting_action)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	lighting_program->use();
+	lighting_program->use(true);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, position_depth_buffer);
@@ -129,6 +132,8 @@ void SSAO::lightingPass()
 
 	glActiveTexture(GL_TEXTURE3);
 	glBindTexture(GL_TEXTURE_2D, blur_buffer);
+
+	lighting_action(lighting_program);
 
 	screen_quad->draw(lighting_program);
 }
