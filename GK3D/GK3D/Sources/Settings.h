@@ -137,6 +137,7 @@ public:
 	static constexpr char* ShaderSSAONormalBufferName = "normal_buffer";
 	static constexpr char* ShaderSSAOColorBufferName = "color_buffer";
 	static constexpr char* ShaderSSAONoiseBufferName = "noise_buffer";
+	static constexpr char* ShaderSSAOOcclusionBufferName = "occlusion_buffer";
 
 	static constexpr char* ShaderSSAONearPlaneLocationName = "near_plane";
 	static constexpr char* ShaderSSAOFarPlaneLocationName = "far_plane";

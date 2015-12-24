@@ -20,7 +20,6 @@ void main()
 	{
 		for (int y = 0; y < blur_size; ++y) 
 		{
-			// TODO: config
 			vec2 offset = (vec2(-float(blur_size / 2)) + vec2(float(x), float(y))) * texel_size;
 			result += texture(occlusion, tex_coord + offset).r;
 		}

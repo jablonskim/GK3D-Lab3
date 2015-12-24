@@ -33,25 +33,30 @@ private:
 	GLuint color_buffer;
 	GLuint noise_buffer;
 	GLuint occlusion_buffer;
+	GLuint blur_buffer;
 
 	std::vector<glm::vec3> sample_kernel;
 
 	void geometryPass(std::function<void(std::shared_ptr<ShaderProgram>&)> geometry_action);
 	void occlusionPass(glm::mat4& projection);
 	void blurPass();
+	void lightingPass();
 
 	void createGeometryFbo();
 	void createOcclusionFbo();
+	void createBlurFbo();
 
 	void createPositionDepthBuffer();
 	void createNormalBuffer();
 	void createColorBuffer();
 	void createOcclusionBuffer();
+	void createBlurBuffer();
 
 	void createSampleKernel();
 	void createNoiseBuffer();
 
 	void initOcclusionBuffers();
+	void initLightingBuffers();
 
 	GLfloat lerp(GLfloat a, GLfloat b, GLfloat f);
 };
